@@ -2,6 +2,7 @@ import argparse
 
 import cv2
 import zmq
+import time
 
 from camera.Camera import Camera
 from constants import PORT, SERVER_ADDRESS
@@ -37,8 +38,15 @@ class Streamer:
 
         while self.footage_socket and self.keep_running:
             try:
+                time.sleep(0.2) # Sleep to decrease processing time per frame, VERY EFFECTIVE
                 frame = camera.current_frame.read()  # grab the current frame
-                image_as_string = image_to_string(frame)
+                scale_percent = 100 # percent of original size,     SET BY YOUR DESIRE
+                width = int(frame.shape[1] * scale_percent / 100)
+                height = int(frame.shape[0] * scale_percent / 100)
+                dim = (width, height)
+                frameSmall = cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
+                frameSmall = cv2.cvtColor(frameSmall, cv2.COLOR_BGR2GRAY) #Convert the image to grey scale, decreasing processing time and network trafic, YOU CAN DELETE THIS LINE TO GET A COLOR IMAGE
+                image_as_string = image_to_string(frameSmall)
                 self.footage_socket.send(image_as_string)
 
             except KeyboardInterrupt:
