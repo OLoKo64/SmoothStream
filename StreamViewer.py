@@ -18,7 +18,7 @@ class StreamViewer:
         context = zmq.Context()
         self.footage_socket = context.socket(zmq.SUB)
         self.footage_socket.bind('tcp://*:' + port)
-        self.footage_socket.setsockopt_string(zmq.SUBSCRIBE, np.unicode(''))
+        self.footage_socket.setsockopt_string(zmq.SUBSCRIBE, str(''))
         self.current_frame = None
         self.keep_running = True
 
