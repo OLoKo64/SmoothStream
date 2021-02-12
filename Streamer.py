@@ -38,7 +38,7 @@ class Streamer:
 
         while self.footage_socket and self.keep_running:
             try:
-                time.sleep(0.2) # Sleep to decrease processing time per frame, VERY EFFECTIVE
+                time.sleep(0.05) # Sleep to decrease processing time per frame, VERY EFFECTIVE
                 frame = camera.current_frame.read()  # grab the current frame
                 scale_percent = 100 # percent of original size,     SET BY YOUR DESIRE
                 width = int(frame.shape[1] * scale_percent / 100)
